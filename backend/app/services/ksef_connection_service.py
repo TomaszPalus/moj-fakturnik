@@ -16,11 +16,12 @@ def create_ksef_connection(
 
     return connection
 
-def get_ksef_connections(
-    db
+def get_ksef_connection(
+    db,
+    connection_id: int
 ):
     return (
         db.query(KsefConnection)
-        .order_by(KsefConnection.id.desc())
-        .all()
+        .filter(KsefConnection.id == connection_id)
+        .first()
     )
