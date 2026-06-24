@@ -11,13 +11,14 @@ from app.services.telegram_service import (
 
 def create_invoice(
     db,
+    company_id: int,
     user_id: int,
     invoice_number: str,
     seller_name: str,
     amount: float
 ):
     invoice = Invoice(
-        user_id=user_id,
+        company_id=company_id,
         invoice_number=invoice_number,
         seller_name=seller_name,
         amount=amount
@@ -48,13 +49,13 @@ def create_invoice(
 
     return invoice
 
-def get_user_invoices(
+def get_company_invoices(
     db,
-    user_id: int
+    company_id: int
 ):
     return (
         db.query(Invoice)
-        .filter(Invoice.user_id == user_id)
+        .filter(Invoice.company_id == company_id)
         .order_by(Invoice.id.desc())
         .all()
     )

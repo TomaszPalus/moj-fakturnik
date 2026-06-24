@@ -29,3 +29,15 @@ def get_user_companies(
         .order_by(Company.id.desc())
         .all()
     )
+    
+def get_company(
+    db,
+    company_id: int,
+    owner_user_id: int
+):
+    return (
+        db.query(Company)
+        .filter(Company.id == company_id)
+        .filter(Company.owner_user_id == owner_user_id)
+        .first()
+    )

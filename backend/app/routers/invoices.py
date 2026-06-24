@@ -8,7 +8,7 @@ from app.schemas.invoice import InvoiceCreate
 
 from app.services.invoice_service import (
     create_invoice,
-    get_user_invoices
+    get_company_invoices
 )
 
 router = APIRouter(
@@ -25,18 +25,20 @@ def add_mock_invoice(
 ):
     return create_invoice(
         db=db,
+        company_id=1,
         user_id=current_user.id,
         invoice_number=data.invoice_number,
         seller_name=data.seller_name,
         amount=data.amount
     )
-    
+
+
 @router.get("")
 def list_invoices(
     db=Depends(get_db),
     current_user=Depends(get_current_user)
 ):
-    return get_user_invoices(
+    return get_company_invoices(
         db=db,
-        user_id=current_user.id
+        company_id=1
     )
