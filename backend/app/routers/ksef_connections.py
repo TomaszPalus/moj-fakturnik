@@ -13,7 +13,11 @@ from app.schemas.ksef_connection import (
 from app.services.ksef_connection_service import (
     create_ksef_connection,
     get_ksef_connection,
-    get_ksef_connection
+    get_active_ksef_connection
+)
+
+from app.services.ksef_client import (
+    test_connection
 )
 
 router = APIRouter(
@@ -52,4 +56,25 @@ def get_single_ksef_connection(
     return get_ksef_connection(
         db=db,
         connection_id=connection_id
+    )
+    
+@router.post("/test/{company_id}")
+def test_ksef_connection_endpoint(
+    company_id: int,
+    db=Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    connection = get_active_ksef_connection(
+        db=db,
+        company_id=company_id
+    )
+
+    if not connection:
+        return {
+            "success": False,
+            "message": "No active KSeF connection"
+        }
+
+    return test_connection(
+        token=connection.token
     )

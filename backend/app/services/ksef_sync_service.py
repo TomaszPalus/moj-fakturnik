@@ -13,11 +13,41 @@ from app.services.notification_service import (
 from app.services.telegram_service import (
     send_telegram_message
 )
+from app.services.ksef_connection_service import (
+    get_active_ksef_connection
+)
+from app.services.ksef_client import (
+    test_connection
+)
 
 def run_mock_sync(
     db,
     company_id: int
 ):
+    connection = get_active_ksef_connection(
+        db=db,
+        company_id=company_id
+    )
+    if not connection:
+        return create_sync_log(
+            db=db,
+            company_id=company_id,
+            status="FAILED",
+            invoices_found=0,
+            error_message="No active KSeF connection found."
+        )
+        
+    result = test_connection(
+        token=connection.token
+    )
+    if not result["success"]:
+        return create_sync_log(
+            db=db,
+            company_id=company_id,
+            status="FAILED",
+            invoices_found=0,
+            error_message=result["message"]
+        )
     new_invoices_count=0
     
     for i in range(1, 4):
