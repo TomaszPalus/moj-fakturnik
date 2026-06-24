@@ -2,7 +2,7 @@ from fastapi import Depends
 from fastapi import HTTPException
 from fastapi.security import HTTPBearer
 
-from app.database import SessionLocal
+from app.core.database import SessionLocal
 from app.services.jwt_service import decode_access_token
 from app.services.user_service import get_user_by_id
 

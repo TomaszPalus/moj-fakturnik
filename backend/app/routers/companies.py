@@ -1,15 +1,15 @@
 from fastapi import APIRouter
 from fastapi import Depends
 
-from app.dependencies import get_db
-from app.dependencies import get_current_user
+from app.core.dependencies import get_db
+from app.core.dependencies import get_current_user
 
 from app.schemas.company import CompanyCreate
 
 from app.services.company_service import (
     create_company,
     get_user_companies,
-    get_company
+    get_company_or_404,
 )
 
 router = APIRouter(
@@ -47,7 +47,7 @@ def get_single_company(
     db=Depends(get_db),
     current_user=Depends(get_current_user)
 ):
-    return get_company(
+    return get_company_or_404(
         db=db,
         company_id=company_id,
         owner_user_id=current_user.id

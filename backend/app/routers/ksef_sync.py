@@ -4,47 +4,24 @@ from fastapi import Depends
 from app.core.dependencies import get_db
 from app.core.dependencies import get_current_user
 
-from app.schemas.invoice import InvoiceCreate
-
-from app.services.invoice_service import (
-    create_invoice,
-    get_company_invoices
+from app.services.ksef_sync_service import (
+    run_mock_sync
 )
-
+from app.services.ksef_sync_log_service import (
+    get_company_sync_logs
+)
 from app.services.company_service import (
     get_company_or_404
 )
 
 router = APIRouter(
-    prefix="/companies/{company_id}/invoices",
-    tags=["invoices"]
+    prefix="/companies/{company_id}/ksef-sync",
+    tags=["ksef-sync"]
 )
 
 
-@router.post("/mock")
-def add_mock_invoice(
-    company_id: int,
-    data: InvoiceCreate,
-    db=Depends(get_db),
-    current_user=Depends(get_current_user)
-):
-    get_company_or_404(
-        db=db,
-        company_id=company_id,
-        owner_user_id=current_user.id
-    )
-    return create_invoice(
-        db=db,
-        company_id=company_id,
-        user_id=current_user.id,
-        invoice_number=data.invoice_number,
-        seller_name=data.seller_name,
-        amount=data.amount
-    )
-
-
-@router.get("")
-def list_invoices(
+@router.post("")
+def sync_company(
     company_id: int,
     db=Depends(get_db),
     current_user=Depends(get_current_user)
@@ -54,7 +31,23 @@ def list_invoices(
         company_id=company_id,
         owner_user_id=current_user.id
     )
-    return get_company_invoices(
+    return run_mock_sync(
+        db=db,
+        company_id=company_id
+    )
+
+@router.get("/logs")
+def list_sync_logs(
+    company_id: int,
+    db=Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    get_company_or_404(
+        db=db,
+        company_id=company_id,
+        owner_user_id=current_user.id
+    )
+    return get_company_sync_logs(
         db=db,
         company_id=company_id
     )

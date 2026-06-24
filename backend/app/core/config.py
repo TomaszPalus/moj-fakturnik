@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     JWT_SECRET: str
     JWT_ALGORITHM: str
     TELEGRAM_BOT_TOKEN: str
+    ENCRYPTION_KEY: str
 
     class Config:
         env_file = ".env"

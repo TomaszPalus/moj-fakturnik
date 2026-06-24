@@ -1,6 +1,6 @@
 import requests
 
-from app.config import settings
+from app.core.config import settings
 
 
 def send_telegram_message(

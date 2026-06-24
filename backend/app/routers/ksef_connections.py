@@ -2,8 +2,8 @@ from fastapi import APIRouter
 from fastapi import Depends
 from typing import List
 
-from app.dependencies import get_db
-from app.dependencies import get_current_user
+from app.core.dependencies import get_db
+from app.core.dependencies import get_current_user
 
 from app.schemas.ksef_connection import (
     KsefConnectionCreate,

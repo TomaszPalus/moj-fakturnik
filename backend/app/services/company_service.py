@@ -1,5 +1,5 @@
+from fastapi import HTTPException
 from app.models.company import Company
-
 
 def create_company(
     db,
@@ -41,3 +41,22 @@ def get_company(
         .filter(Company.owner_user_id == owner_user_id)
         .first()
     )
+
+def get_company_or_404(
+    db,
+    company_id: int,
+    owner_user_id: int
+):
+    company = get_company(
+        db=db,
+        company_id=company_id,
+        owner_user_id=owner_user_id
+    )
+
+    if not company:
+        raise HTTPException(
+            status_code=404,
+            detail="Company not found"
+        )
+
+    return company

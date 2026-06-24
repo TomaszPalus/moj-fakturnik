@@ -59,3 +59,16 @@ def get_company_invoices(
         .order_by(Invoice.id.desc())
         .all()
     )
+    
+def invoice_exists(
+    db,
+    company_id: int,
+    invoice_number: str
+):
+    return (
+        db.query(Invoice)
+        .filter(Invoice.company_id == company_id)
+        .filter(Invoice.invoice_number == invoice_number)
+        .first()
+        is not None
+    )
