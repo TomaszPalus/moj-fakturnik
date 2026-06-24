@@ -2,6 +2,7 @@ from logging.config import fileConfig
 from app.models.user import Base
 from app.models.notification_channel import NotificationChannel
 from app.models.invoice import Invoice
+from app.models.company import Company
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 

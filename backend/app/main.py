@@ -7,6 +7,9 @@ from app.routers.notifications import (
 from app.routers.invoices import (
     router as invoices_router
 )
+from app.routers.companies import (
+    router as companies_router
+)
 
 app = FastAPI(
     title=settings.APP_NAME
@@ -14,6 +17,7 @@ app = FastAPI(
 
 app.include_router(invoices_router)
 app.include_router(notifications_router)
+app.include_router(companies_router)
 
 @app.get("/")
 def root():
