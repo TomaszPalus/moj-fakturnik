@@ -12,20 +12,21 @@ from app.services.invoice_service import (
 )
 
 router = APIRouter(
-    prefix="/invoices",
+    prefix="/companies/{company_id}/invoices",
     tags=["invoices"]
 )
 
 
 @router.post("/mock")
 def add_mock_invoice(
+    company_id: int,
     data: InvoiceCreate,
     db=Depends(get_db),
     current_user=Depends(get_current_user)
 ):
     return create_invoice(
         db=db,
-        company_id=1,
+        company_id=company_id,
         user_id=current_user.id,
         invoice_number=data.invoice_number,
         seller_name=data.seller_name,
@@ -35,10 +36,11 @@ def add_mock_invoice(
 
 @router.get("")
 def list_invoices(
+    company_id: int,
     db=Depends(get_db),
     current_user=Depends(get_current_user)
 ):
     return get_company_invoices(
         db=db,
-        company_id=1
+        company_id=company_id
     )
