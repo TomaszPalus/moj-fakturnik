@@ -6,7 +6,10 @@ from app.dependencies import get_current_user
 
 from app.schemas.invoice import InvoiceCreate
 
-from app.services.invoice_service import create_invoice
+from app.services.invoice_service import (
+    create_invoice,
+    get_user_invoices
+)
 
 router = APIRouter(
     prefix="/invoices",
@@ -26,4 +29,14 @@ def add_mock_invoice(
         invoice_number=data.invoice_number,
         seller_name=data.seller_name,
         amount=data.amount
+    )
+    
+@router.get("")
+def list_invoices(
+    db=Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return get_user_invoices(
+        db=db,
+        user_id=current_user.id
     )

@@ -47,3 +47,14 @@ def create_invoice(
             )
 
     return invoice
+
+def get_user_invoices(
+    db,
+    user_id: int
+):
+    return (
+        db.query(Invoice)
+        .filter(Invoice.user_id == user_id)
+        .order_by(Invoice.id.desc())
+        .all()
+    )
