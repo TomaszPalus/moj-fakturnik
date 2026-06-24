@@ -16,6 +16,11 @@ from app.services.notification_service import (
 
 from app.services.telegram_service import send_telegram_message
 
+from app.services.notification_service import (
+    delete_channel,
+    toggle_channel,
+)
+
 router = APIRouter(
     prefix="/notifications",
     tags=["notifications"]
@@ -74,3 +79,33 @@ def test_notifications(
     return {
         "sent": sent
     }
+    
+@router.delete("/channel/{channel_id}")
+def remove_channel(
+    channel_id: int,
+    db=Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    deleted = delete_channel(
+        db=db,
+        channel_id=channel_id,
+        user_id=current_user.id
+    )
+
+    return {
+        "deleted": deleted
+    }
+    
+@router.patch("/channel/{channel_id}/toggle")
+def toggle(
+    channel_id: int,
+    db=Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    channel = toggle_channel(
+        db=db,
+        channel_id=channel_id,
+        user_id=current_user.id
+    )
+
+    return channel

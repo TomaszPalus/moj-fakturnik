@@ -4,11 +4,15 @@ from app.config import settings
 from app.routers.notifications import (
     router as notifications_router
 )
+from app.routers.invoices import (
+    router as invoices_router
+)
 
 app = FastAPI(
     title=settings.APP_NAME
 )
 
+app.include_router(invoices_router)
 app.include_router(notifications_router)
 
 @app.get("/")

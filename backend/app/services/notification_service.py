@@ -40,3 +40,45 @@ def get_active_user_channels(
         .filter(NotificationChannel.is_active == True)
         .all()
     )
+    
+def delete_channel(
+    db,
+    channel_id: int,
+    user_id: int
+):
+    channel = (
+        db.query(NotificationChannel)
+        .filter(NotificationChannel.id == channel_id)
+        .filter(NotificationChannel.user_id == user_id)
+        .first()
+    )
+
+    if not channel:
+        return False
+
+    db.delete(channel)
+    db.commit()
+
+    return True
+
+def toggle_channel(
+    db,
+    channel_id: int,
+    user_id: int
+):
+    channel = (
+        db.query(NotificationChannel)
+        .filter(NotificationChannel.id == channel_id)
+        .filter(NotificationChannel.user_id == user_id)
+        .first()
+    )
+
+    if not channel:
+        return None
+
+    channel.is_active = not channel.is_active
+
+    db.commit()
+    db.refresh(channel)
+
+    return channel
