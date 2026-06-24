@@ -9,7 +9,8 @@ from app.schemas.ksef_connection import (
 )
 
 from app.services.ksef_connection_service import (
-    create_ksef_connection
+    create_ksef_connection,
+    get_ksef_connections
 )
 
 router = APIRouter(
@@ -29,3 +30,10 @@ def add_ksef_connection(
         company_id=data.company_id,
         token=data.token
     )
+    
+@router.get("")
+def list_ksef_connections(
+    db=Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return get_ksef_connections(db=db)

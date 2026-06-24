@@ -1,6 +1,5 @@
 from app.models.ksef_connection import KsefConnection
 
-
 def create_ksef_connection(
     db,
     company_id: int,
@@ -16,3 +15,12 @@ def create_ksef_connection(
     db.refresh(connection)
 
     return connection
+
+def get_ksef_connections(
+    db
+):
+    return (
+        db.query(KsefConnection)
+        .order_by(KsefConnection.id.desc())
+        .all()
+    )
